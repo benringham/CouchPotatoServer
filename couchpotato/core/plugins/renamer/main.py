@@ -430,12 +430,12 @@ class Renamer(Plugin):
                                     remove_files.append(current_file)
                                 remove_releases.append(release)
                             # Same quality, but still downloaded, so maybe repack/proper/unrated/directors cut etc
-                            elif release.quality.order is group['meta_data']['quality']['order']:
+                            elif release.quality.order is group['meta_data']['quality']['order'] and self.downloadIsTorrent(release_download):
                                 log.info('Not going to rename %s existing release as it probably is a seeding torrent which someone has marked as complete. Adding a already_renamed tag and cancelling renaming', (movie.library.titles[0].title)
-				fireEvent('release.update.status', release.id, status = seeding_status, single = True)
-				self.tagRelease(group = group, tag = 'renamed_already')
-				remove_leftovers = False
-				fireEvent('movie.renaming.canceled', data = group)
+                				fireEvent('release.update.status', release.id, status = seeding_status, single = True)
+                				self.tagRelease(group = group, tag = 'renamed_already')
+                				remove_leftovers = False
+                				fireEvent('movie.renaming.canceled', data = group)
 
                             # Downloaded a lower quality, rename the newly downloaded files/folder to exclude them from scan
                             else:

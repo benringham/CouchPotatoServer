@@ -431,10 +431,11 @@ class Renamer(Plugin):
                                 remove_releases.append(release)
                             # Same quality, but still downloaded, so maybe repack/proper/unrated/directors cut etc
                             elif release.quality.order is group['meta_data']['quality']['order']:
-                                log.info('Same quality release already exists for %s, with quality %s. Assuming repack.', (movie.library.titles[0].title, release.quality.label))
-                                for current_file in release.files:
-                                    remove_files.append(current_file)
-                                remove_releases.append(release)
+                                log.info('Not going to rename %s existing release as it probably is a seeding torrent which someone has marked as complete. Adding a already_renamed tag and cancelling renaming', (movie.library.titles[0].title)
+				fireEvent('release.update.status', release.id, status = seeding_status, single = True)
+				self.tagRelease(group = group, tag = 'renamed_already')
+				remove_leftovers = False
+				fireEvent('movie.renaming.canceled', data = group)
 
                             # Downloaded a lower quality, rename the newly downloaded files/folder to exclude them from scan
                             else:
@@ -517,7 +518,7 @@ class Renamer(Plugin):
                     self.makeDir(os.path.dirname(dst))
 
                     try:
-                        self.moveFile(src, dst, forcemove = not self.downloadIsTorrent(release_download) or self.fileIsAdded(src, group))
+                        self.moveFile(src, dst, forcemove = False)
                         group['renamed_files'].append(dst)
                     except:
                         log.error('Failed moving the file "%s" : %s', (os.path.basename(src), traceback.format_exc()))

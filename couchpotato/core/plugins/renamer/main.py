@@ -431,11 +431,11 @@ class Renamer(Plugin):
                                 remove_releases.append(release)
                             # Same quality, but still downloaded, so maybe repack/proper/unrated/directors cut etc
                             elif release.quality.order is group['meta_data']['quality']['order']:
-                                log.info('Not going to rename %s existing release as it probably is a seeding torrent which someone has marked as complete. Adding a already_renamed tag and cancelling renaming', (movie.library.titles[0].title))
-                		fireEvent('release.update.status', release.id, status = seeding_status, single = True)
-                		self.tagRelease(group = group, tag = 'renamed_already')
-                		remove_leftovers = False
-                		fireEvent('movie.renaming.canceled', data = group)
+                                  log.info('Not going to rename %s existing release as it probably is a seeding torrent which someone has marked as complete. Adding a already_renamed tag and cancelling renaming', (movie.library.titles[0].title))
+                		          fireEvent('release.update.status', release.id, status = seeding_status, single = True)
+                		          self.tagRelease(group = group, tag = 'renamed_already')
+                		          remove_leftovers = False
+                		          fireEvent('movie.renaming.canceled', data = group)
 
                             # Downloaded a lower quality, rename the newly downloaded files/folder to exclude them from scan
                             else:
@@ -525,7 +525,6 @@ class Renamer(Plugin):
                         self.tagRelease(group = group, tag = 'failed_rename')
 
             # Tag folder if it is in the 'from' folder and it will not be removed because it is a torrent
-            if self.movieInFromFolder(movie_folder) and self.downloadIsTorrent(release_download):
                 self.tagRelease(group = group, tag = 'renamed_already')
 
             # Remove matching releases
